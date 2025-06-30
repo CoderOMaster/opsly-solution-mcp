@@ -15,10 +15,6 @@ This repository implements a robust Model Context Protocol (MCP) solution for th
   * [1. Clone and Install Dependencies](#1-clone-and-install-dependencies)
   * [2. (Optional) Knowledge Graph Setup](#2-optional-knowledge-graph-setup)
   * [3. Launch the Streamlit App](#3-launch-the-streamlit-app)
-* [Configuration](#-configuration)
-* [Development](#-development)
-* [Contributing](#-contributing)
-* [License](#-license)
 
 ---
 
@@ -63,8 +59,8 @@ This repository implements a robust Model Context Protocol (MCP) solution for th
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/opsly-mcp-sktime.git
-   cd opsly-mcp-sktime
+   git clone https://github.com/CoderOMaster/opsly-solution-mcp
+   cd opsly-solution-mcp
    ```
 2. **Install dependencies**
 
@@ -82,7 +78,7 @@ Follow the [Installation](#-installation) steps above.
 
 ### 2. (Optional) Knowledge Graph Setup
 
-> **Note:** Skip these steps if you only want the MCP functionality without the knowledge graph.
+> **Note:** Skip these steps if you only want the MCP functionality without the knowledge graph. Its just an extra tool for NLP TO CYPHER queries for quick code search
 
 1. **Start your graph database** (e.g., Neo4j)
 2. **Run the repo cloner** to normalize files:
@@ -96,7 +92,7 @@ Follow the [Installation](#-installation) steps above.
    python3 knowledge.py
    ```
 
-### 3. Launch the Streamlit App
+### 3. Launch the Streamlit App (CAN RUN WITHOUT NEO4J AND KG SETUP)
 
 ```bash
 streamlit run app.py
@@ -106,13 +102,11 @@ Open your browser at `http://localhost:8501` to interact with the MCP server via
 
 ---
 
-## 🔧 Configuration
+## Reference Links Used 
 
-Adjust settings in `config.py` (create one from `config.example.py`) to specify:
-
-* MCP server host/port
-* Graph database connection URI, username, and password
-* LLM model endpoints (e.g., Gemini 2 Flash)
+https://mcpserver.cc/server/github
+https://dspy.ai/
+https://ai.google.dev/gemini-api/docs/function-calling
 
 ---
 
