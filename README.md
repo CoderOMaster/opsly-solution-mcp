@@ -30,13 +30,10 @@ A powerful, extensible Q\&A and code-exploration system built on the Model Conte
 
 ![Project Demo Image Sample](sample.jpeg)
 
-<video controls width="600">
-  <source src="sample.mkv" type="video/x-matroska">
-  Your browser does not support the video tag.
-</video>
 
 [View the demo video](simplescreenrecorder-2025-06-30_14.13.04.mkv)
 
+[LINK TO EXTERNAL SITE FOR DEMO](https://vimeo.com/1097457204?share=copy)
 ---
 
 ## 📦 Tech Stack
@@ -44,29 +41,12 @@ A powerful, extensible Q\&A and code-exploration system built on the Model Conte
 | Component              | Technology                          |
 | ---------------------- | ----------------------------------- |
 | Language               | Python 3.8+                         |
-| MCP Framework          | Custom JSON-RPC servers             |
+| MCP Framework          | Custom JSON-RPC servers (MCP)       |
 | Streamlit UI           | Streamlit                           |
 | NLP & Summarization    | Dspy, LLM function-calling          |
-| Knowledge Graph (Opt.) | Neo4j / Cypher                      |
-| LLM Backend            | Gemini 2 Flash / OpenAI / Anthropic |
+| Knowledge Graph (Opt.) | Neo4j                               |
+| LLM Backend            | Gemini 2 Flash                      |
 
----
-
-## 🗂 Project Structure
-
-```
-├── app.py                  # Streamlit UI entrypoint
-├── mcp_servers/            # Individual MCP server modules
-│   ├── file_content.py     # Raw & line-filtered file reads
-│   ├── repo_tree.py        # Directory trees & pagination
-│   └── code_search.py      # Pattern-based search with ripgrep
-├── knowledge/              # Optional graph ingestion & queries
-│   ├── repo_cloner.py      # Normalizes files for graph import
-│   └── embed_graph.py      # Embeds content into Neo4j
-├── llm_txt_generator.py    # Repo mapping & summary via Dspy
-├── requirements.txt        # Python dependencies
-└── README.md               # Project documentation
-```
 
 ---
 
@@ -100,22 +80,14 @@ A powerful, extensible Q\&A and code-exploration system built on the Model Conte
 
    ```bash
    python knowledge/repo_cloner.py   # normalize files
-   python knowledge/embed_graph.py   # ingest into Neo4j
+   python knowledge/knowledge.py   # ingest into Neo4j
    ```
 
 ---
 
 ## 🚀 Usage
 
-1. **Launch MCP Servers**
-   Each server runs independently on a configurable port, e.g.:
-
-   ```bash
-   python mcp_servers/file_content.py --port 8001
-   python mcp_servers/repo_tree.py    --port 8002
-   python mcp_servers/code_search.py  --port 8003
-   ```
-2. **Start the Streamlit App**
+1. **Launch MCP Server**
 
    ```bash
    streamlit run app.py
