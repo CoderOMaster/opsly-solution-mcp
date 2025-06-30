@@ -1,0 +1,181 @@
+```text
+PROJECT_NAME: sktime
+
+PURPOSE:
+sktime provides a unified interface for machine learning with time series data in Python. It offers a comprehensive library for various time series learning tasks, including forecasting, classification, clustering, anomaly/changepoint detection, and regression. Its goals include enhancing interoperability within the time series analysis ecosystem, providing dedicated time series algorithms, offering tools for composite model building (pipelining, ensembling, tuning, reduction), and ensuring compatibility with popular machine learning libraries like scikit-learn.
+
+KEY_CONCEPTS:
+- Time Series Analysis
+- Forecasting
+- Time Series Classification
+- Time Series Clustering
+- Anomaly Detection
+- Changepoint Detection
+- Time Series Regression
+- Transformations
+- Estimators
+- Pipelines
+- Ensembling
+- Tuning
+- Reduction
+- Unified Interface
+- Scikit-learn Compatibility
+- Time Series Data Types
+- Forecasting Horizon
+- Distances
+- Kernels
+- Time Series Alignment
+- Splitters
+- Hierarchical Time Series
+
+ARCHITECTURE:
+sktime is designed with a modular and extensible architecture, inspired by scikit-learn, providing a unified API for various time series tasks. The core structure is organized around distinct machine learning tasks, each residing in its own top-level module (e.g., `sktime/forecasting`, `sktime/classification`, `sktime/transformations`).
+
+Key architectural components include:
+- **Base Classes (`sktime/base`)**: Defines fundamental interfaces and abstract base classes for all estimators, ensuring consistency.
+- **Task-Specific Modules**: Contain algorithms and models tailored for specific tasks, including implementations, wrappers, and composite estimators.
+- **Data Types (`sktime/datatypes`)**: Manages and converts different time series data formats for seamless interoperability.
+- **Composition Tools (`sktime/compose`, `sktime/pipeline`)**: Enables building complex models by chaining or combining simpler estimators (e.g., pipelines, ensembles, reducers).
+- **External Library Integration**: Includes wrappers and adapters to integrate algorithms from other popular time series and machine learning libraries (e.g., `statsmodels`, `pmdarima`, `fbprophet`, `darts`).
+- **Extension Templates**: Provides clear templates for users and developers to easily add new estimators compatible with sktime's API.
+This design promotes code reusability, consistency, and extensibility.
+
+TECH_STACK:
+- **Languages**: Python (3.9-3.13)
+- **Libraries/Frameworks**:
+    - Core: numpy, pandas, scikit-learn, scipy, joblib, scikit-base
+    - Optional (for specific functionalities): statsmodels, pmdarima, fbprophet, tsfresh, PyOD, darts, neuralforecast
+- **Build System**: setuptools
+- **Testing**: pytest (with pytest-randomly, pytest-timeout, pytest-xdist)
+- **Linting/Formatting**: ruff, pre-commit
+- **Documentation**: Sphinx, MyST-parser, nbsphinx, numpydoc
+- **CI/CD**: GitHub Actions
+
+IMPORTANT_DIRECTORIES:
+- sktime/
+- sktime/forecasting/
+- sktime/classification/
+- sktime/transformations/
+- sktime/datasets/
+- sktime/utils/
+- sktime/tests/
+- docs/
+- examples/
+- .github/workflows/
+- build_tools/
+- extension_templates/
+- sktime/libs/
+
+ENTRY_POINTS:
+- pyproject.toml
+- setup.cfg
+- sktime/__init__.py
+- Makefile
+- docs/source/index.rst
+- examples/
+- CONTRIBUTING.md
+- README.md
+
+USAGE_EXAMPLES:
+```python
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# 1. Time Series Forecasting
+# sktime provides various forecasters and a unified interface for forecasting.
+from sktime.datasets import load_airline
+from sktime.forecasting.naive import NaiveForecaster
+from sktime.forecasting.model_selection import ForecastingHorizon
+
+print("--- Time Series Forecasting Example ---")
+# Load a time series dataset
+y = load_airline()
+
+# Define forecasting horizon (e.g., predict the next 12 months)
+# We'll split the data to simulate a real-world scenario
+y_train, y_test = y[:-12], y[-12:]
+fh = ForecastingHorizon(y_test.index, is_relative=False) # Forecast for the actual dates in y_test
+
+# Initialize and fit a forecaster (e.g., NaiveForecaster)
+forecaster = NaiveForecaster(strategy="last")
+forecaster.fit(y_train)
+
+# Make predictions
+y_pred = forecaster.predict(fh)
+
+print("Original last 5 values:\n", y_test.tail())
+print("\nPredicted last 5 values:\n", y_pred.tail())
+print("\n")
+
+# 2. Time Series Classification
+# sktime offers a range of time series classifiers.
+from sktime.datasets import load_basic_motions
+from sktime.classification.distance_based import KNeighborsTimeSeriesClassifier
+
+print("--- Time Series Classification Example ---")
+# Load a time series classification dataset
+X, y = load_basic_motions(return_X_y=True)
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+
+# Initialize and fit a time series classifier
+classifier = KNeighborsTimeSeriesClassifier(n_neighbors=1)
+classifier.fit(X_train, y_train)
+
+# Make predictions
+y_pred = classifier.predict(X_test)
+
+# Evaluate the classifier
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Classification Accuracy: {accuracy:.2f}")
+print("\n")
+
+# 3. Building Pipelines with Transformations
+# sktime allows building scikit-learn-like pipelines for time series tasks.
+from sktime.transformations.series.detrend import Detrender
+from sktime.forecasting.arima import ARIMA
+from sktime.forecasting.compose import make_pipeline
+
+print("--- Forecasting Pipeline Example ---")
+# Load the airline dataset again
+y = load_airline()
+y_train, y_test = y[:-12], y[-12:]
+fh = ForecastingHorizon(y_test.index, is_relative=False)
+
+# Create a pipeline: first detrend the series, then apply ARIMA
+# Note: ARIMA requires a non-stationary series, so detrending can be useful.
+# For simplicity, we use a basic ARIMA model.
+pipeline_forecaster = make_pipeline(
+    Detrender(),
+    ARIMA(order=(1, 1, 0), suppress_warnings=True)
+)
+
+# Fit the pipeline
+pipeline_forecaster.fit(y_train)
+
+# Make predictions with the pipeline
+y_pred_pipeline = pipeline_forecaster.predict(fh)
+
+print("Original last 5 values:\n", y_test.tail())
+print("\nPipeline Predicted last 5 values:\n", y_pred_pipeline.tail())
+print("\n")
+```
+
+DEVELOPMENT.md:
+The `sktime` project is primarily developed in Python, targeting versions 3.9 to 3.13. Core dependencies include `numpy`, `pandas`, `scikit-learn`, `scipy`, `joblib`, and `scikit-base`. Extensive optional dependencies are managed via `pyproject.toml` for specific functionalities like deep learning, advanced forecasting models (e.g., Prophet, Darts), and various data transformations.
+
+The development workflow is robust and well-defined:
+- **Build System**: `setuptools` is used for packaging and distribution.
+- **Dependency Management**: `pyproject.toml` specifies both core and optional dependencies, ensuring a consistent environment.
+- **Testing**: `pytest` is the primary testing framework, with configurations for `pytest-randomly`, `pytest-timeout`, and `pytest-xdist` to ensure comprehensive and efficient test execution. Tests are organized within `sktime/tests/` and in `tests/` subdirectories of individual modules.
+- **Linting/Formatting**: `ruff` is configured for code style and quality checks, with specific rules and per-file ignores defined in `pyproject.toml`. `pre-commit` hooks are also utilized to enforce code quality before commits.
+- **Documentation**: Documentation is built using Sphinx, MyST-parser, nbsphinx, and numpydoc. Source files are located in `docs/source/`, encompassing API references, user guides, and developer guides. Jupyter notebooks in `examples/` are seamlessly integrated into the documentation.
+- **Continuous Integration/Deployment (CI/CD)**: Managed via GitHub Actions, with workflows defined in `.github/workflows/` for automated testing (e.g., `test.yml`, `test_all.yml`, `wheels.yml`), updating contributors, and release drafting.
+- **Contribution Guidelines**: Detailed guidelines for contributors are provided in `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `GOVERNANCE.md`, and specific developer guides under `docs/source/developer_guide/`.
+- **Docker Support**: Dockerfiles are available in `.binder/` and `build_tools/docker/` to facilitate environment setup and testing in containerized environments.
+- **Release Management**: Scripts in `build_tools/` (e.g., `make_release.py`) and dedicated GitHub Actions workflows (`release-drafter.yml`, `release.yml`) support the project's release process.
+- **Code Structure**: The `sktime/` directory is highly modular, featuring distinct sub-packages for different machine learning tasks (e.g., `forecasting`, `classification`, `transformations`) and core components (`base`, `datatypes`, `utils`, `registry`). `extension_templates/` provides clear blueprints for developers to add new estimators that adhere to `sktime`'s API.
+```
