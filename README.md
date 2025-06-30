@@ -1,6 +1,5 @@
 ## MCP-Enhanced Code Search & Documentation
 
-![Project Demo](sample.jpeg)
 
 A powerful, extensible Q\&A and code-exploration system built on the Model Context Protocol (MCP). Designed to seamlessly query GitHub repositories, leverage an optional knowledge graph for NLP-driven Cypher queries, and deliver structured documentation summaries—all via an intuitive Streamlit interface.
 
@@ -29,12 +28,14 @@ A powerful, extensible Q\&A and code-exploration system built on the Model Conte
 
 ## 🚀 Demo
 
+![Project Demo Image Sample](sample.jpeg)
+
 <video controls width="600">
   <source src="sample.mkv" type="video/x-matroska">
   Your browser does not support the video tag.
 </video>
 
-[View the demo video](sample.mkv)
+[View the demo video](simplescreenrecorder-2025-06-30_14.13.04.mkv)
 
 ---
 
