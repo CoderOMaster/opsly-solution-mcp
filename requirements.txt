@@ -1,5 +1,5 @@
 google-generativeai
 python-dotenv
 streamlit
-mcp
+mcp[cli]
 dspy
